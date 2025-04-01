@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>模拟 iPhone 16 Pro Max 来电界面</title>
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body,html {
+      height:100%; width:100%; overflow:hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      color:#fff; background:#000;
+      position:relative;
+    }
+    .status-bar {
+      position:absolute; top:0; left:0; width:100%; padding: env(safe-area-inset-top,20px) 15px 10px;
+      display:flex; justify-content:space-between; font-size:14px; opacity:0.8;
+    }
+    .call-container {
+      height:100%; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; text-align:center;
+      background:linear-gradient(to bottom right,#1c1c1e,#000);
+    }
+    .caller-name {
+      font-size:32px; font-weight:500; margin-bottom:8px;
+    }
+    .caller-label {
+      font-size:20px; opacity:0.7; margin-bottom:30px;
+    }
+    .call-status {
+      font-size:20px; opacity:0.8; display:none; margin-top:15px;
+    }
+    .buttons {
+      position:absolute; bottom:50px; width:100%;
+      display:flex; justify-content:space-around; padding:0 50px;
+    }
+    .btn {
+      width:70px; height:70px; border-radius:50%; display:flex;
+      justify-content:center; align-items:center; flex-direction:column;
+      color:#fff; font-size:15px; cursor:pointer;
+    }
+    .btn-answer {
+      background:#34C759; animation:pulse 1.5s infinite;
+    }
+    .btn-decline {
+      background:#FF3B30;
+    }
+    @keyframes pulse {
+      0%{transform:scale(1);} 50%{transform:scale(1.1);} 100%{transform:scale(1);}
+    }
+  </style>
+</head>
+<body>
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <div>中国移动</div>
+    <div style="font-weight:600">4G</div>
+    <div>🔋 100%</div>
+  </div>
+
+  <!-- 来电主体 -->
+  <div class="call-container">
+    <div class="caller-name">未知号码</div>
+    <div class="caller-label">手机来电</div>
+    <div class="call-status" id="status">通话中...</div>
+    
+    <div class="buttons" id="buttons">
+      <div class="btn btn-decline" onclick="declineCall()">拒绝</div>
+      <div class="btn btn-answer" onclick="answerCall()">接听</div>
+    </div>
+    
+    <audio id="callAudio" src="call.mp3"></audio>
+  </div>
+
+  <script>
+    function answerCall(){
+      const audio=document.getElementById('callAudio');
+      audio.play();
+      
+      if(navigator.vibrate){navigator.vibrate([200,100,200]);}
+
+      document.getElementById('buttons').style.display='none';
+      document.getElementById('status').style.display='block';
+      document.querySelector('.caller-label').style.display='none';
+    }
+
+    function declineCall(){
+      if(navigator.vibrate){navigator.vibrate(300);}
+      document.querySelector('.caller-label').innerText='已拒绝';
+      document.getElementById('buttons').style.display='none';
+    }
+  </script>
+</body>
+</html>
